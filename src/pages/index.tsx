@@ -1,6 +1,6 @@
 import { GetStaticProps } from 'next';
-
 import { getPrismicClient } from '../services/prismic';
+import { FiCalendar, FiUser } from 'react-icons/fi';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
@@ -27,7 +27,71 @@ interface HomeProps {
 export default function Home() {
   // TODO
   return (
-    <div>Hello World</div>
+    <main className={styles.homeContainer}>
+      <div className={styles.homeContent}>
+        <a href="">
+          <h1>Como ultilizr Hooks</h1>
+          <p>Pensando em sincronização em vez de ciclos de vida.</p>
+          <section>
+            <div>
+              <FiCalendar className={styles.icon} />
+              <time> 15 Mar 2021</time>
+            </div>
+            <div>
+              <FiUser className={styles.icon} />
+              <p>Joseph Oliveira</p>
+            </div>
+          </section>
+        </a>
+
+        <a href="">
+          <h1>Como ultilizr Hooks</h1>
+          <p>Pensando em sincronização em vez de ciclos de vida.</p>
+          <section>
+            <div>
+              <FiCalendar className={styles.icon} />
+              <time> 15 Mar 2021</time>
+            </div>
+            <div>
+              <FiUser className={styles.icon} />
+              <p>Joseph Oliveira</p>
+            </div>
+          </section>
+        </a>
+
+        <a href="">
+          <h1>Como ultilizr Hooks</h1>
+          <p>Pensando em sincronização em vez de ciclos de vida.</p>
+          <section>
+            <div>
+              <FiCalendar className={styles.icon} />
+              <time> 15 Mar 2021</time>
+            </div>
+            <div>
+              <FiUser className={styles.icon} />
+              <p>Joseph Oliveira</p>
+            </div>
+          </section>
+        </a>
+
+        <a href="">
+          <h1>Como ultilizr Hooks</h1>
+          <p>Pensando em sincronização em vez de ciclos de vida.</p>
+          <section>
+            <div>
+              <FiCalendar className={styles.icon} />
+              <time> 15 Mar 2021</time>
+            </div>
+            <div>
+              <FiUser className={styles.icon} />
+              <p>Joseph Oliveira</p>
+            </div>
+          </section>
+        </a>
+
+        <button>Carregar mais posts</button>
+      </div>
+    </main>
   )
 }
 
@@ -37,8 +101,8 @@ export const getStaticProps = async () => {
 
   // TODO
   return {
-    props:{
-      
+    props: {
+
     }
   }
 };

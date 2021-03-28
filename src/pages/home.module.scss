@@ -1,1 +1,68 @@
 // TODO
+.homeContainer {
+}
+
+.homeContent {
+  max-width: 720px;
+  padding: 0 1.25rem;
+
+  margin: 0 auto;
+
+  a {
+    display: block;
+
+    & + a {
+      margin-top: 3rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+    }
+
+    > p {
+      margin-top: 0.5rem;
+      font-size: 1.125rem;
+    }
+
+    section {
+      display: flex;
+      margin-top: 1.5rem;
+
+      font-size: 0.875rem;
+      color: var(--info);
+
+      div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .icon {
+          margin-right: 0.625rem;
+        }
+
+        time {
+          display: flex;
+          align-items: center;
+          margin-right: 2.5rem;
+        }
+  
+        p {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  button {
+    border: 0;
+
+    margin: 3.5rem 0;
+
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--highlight);
+
+    background: transparent;
+  }
+}
