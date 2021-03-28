@@ -1,9 +1,17 @@
 import { GetStaticProps } from 'next';
-import { getPrismicClient } from '../services/prismic';
 import { FiCalendar, FiUser } from 'react-icons/fi';
+import Prismic from '@prismicio/client';
+
+import { format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
+
+import { getPrismicClient } from '../services/prismic';
+
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
+import { RichText } from 'prismic-dom';
+import { useEffect, useRef, useState } from 'react';
 
 interface Post {
   uid?: string;
@@ -21,88 +29,138 @@ interface PostPagination {
 }
 
 interface HomeProps {
-  postsPagination: PostPagination;
+  postsPagination: PostPagination; xxs
 }
 
-export default function Home() {
+export default function Home({ postsPagination }: HomeProps) {
   // TODO
+  const [nextPage, setNextPage] = useState(postsPagination.next_page);
+  const [otherPost, setOtherPost] = useState([] as Post[]);
+
+  function loadPosts() {
+    var myHeaders = new Headers();
+
+    const myInit = {
+      method: 'GET',
+      headers: myHeaders,
+    };
+
+    if (nextPage) {
+      fetch(nextPage, myInit)
+        .then(response => response.json())
+        .then(data => {
+
+          const posts = data.results.map(post => {
+            return {
+              uid: post.uid,
+              first_publication_date: format(
+                new Date(post.first_publication_date),
+                'dd MMM yyyy',
+                { locale: ptBR }
+              ),
+              data: {
+                title: RichText.asText(post.data.title),
+                subtitle: RichText.asText(post.data.subtitle),
+                author: RichText.asText(post.data.author),
+              },
+            }
+          });
+
+          setOtherPost([...otherPost, ...posts]);
+          setNextPage(data.next_page);
+        });
+    }
+  }
+
   return (
     <main className={styles.homeContainer}>
       <div className={styles.homeContent}>
-        <a href="">
-          <h1>Como ultilizr Hooks</h1>
-          <p>Pensando em sincronização em vez de ciclos de vida.</p>
-          <section>
-            <div>
-              <FiCalendar className={styles.icon} />
-              <time> 15 Mar 2021</time>
-            </div>
-            <div>
-              <FiUser className={styles.icon} />
-              <p>Joseph Oliveira</p>
-            </div>
-          </section>
-        </a>
+        {postsPagination.results.map(post => (
+          <a href="" key={post.uid}>
+            <h1>{post.data.title}</h1>
+            <p>{post.data.subtitle}</p>
+            <section>
+              <div>
+                <FiCalendar size={'1.25rem'} className={styles.icon} />
+                <time>{post.first_publication_date}</time>
+              </div>
+              <div>
+                <FiUser size={'1.25rem'} className={styles.icon} />
+                <p>{post.data.author}</p>
+              </div>
+            </section>
+          </a>
+        ))}
 
-        <a href="">
-          <h1>Como ultilizr Hooks</h1>
-          <p>Pensando em sincronização em vez de ciclos de vida.</p>
-          <section>
-            <div>
-              <FiCalendar className={styles.icon} />
-              <time> 15 Mar 2021</time>
-            </div>
-            <div>
-              <FiUser className={styles.icon} />
-              <p>Joseph Oliveira</p>
-            </div>
-          </section>
-        </a>
+        {
+          otherPost.length > 0 ? (
+            otherPost.map(post => (
+              <a href="" key={post.uid}>
+                <h1>{post.data.title}</h1>
+                <p>{post.data.subtitle}</p>
+                <section>
+                  <div>
+                    <FiCalendar size={'1.25rem'} className={styles.icon} />
+                    <time>{post.first_publication_date}</time>
+                  </div>
+                  <div>
+                    <FiUser size={'1.25rem'} className={styles.icon} />
+                    <p>{post.data.author}</p>
+                  </div>
+                </section>
+              </a>
+            ))
+          ) : <></>
+        }
 
-        <a href="">
-          <h1>Como ultilizr Hooks</h1>
-          <p>Pensando em sincronização em vez de ciclos de vida.</p>
-          <section>
-            <div>
-              <FiCalendar className={styles.icon} />
-              <time> 15 Mar 2021</time>
-            </div>
-            <div>
-              <FiUser className={styles.icon} />
-              <p>Joseph Oliveira</p>
-            </div>
-          </section>
-        </a>
+        {
+          nextPage ? (
+            <button
+              onClick={loadPosts}
+            >Carregar mais posts</button>
+          ) : <></>
+        }
 
-        <a href="">
-          <h1>Como ultilizr Hooks</h1>
-          <p>Pensando em sincronização em vez de ciclos de vida.</p>
-          <section>
-            <div>
-              <FiCalendar className={styles.icon} />
-              <time> 15 Mar 2021</time>
-            </div>
-            <div>
-              <FiUser className={styles.icon} />
-              <p>Joseph Oliveira</p>
-            </div>
-          </section>
-        </a>
-
-        <button>Carregar mais posts</button>
       </div>
     </main>
   )
 }
 
-export const getStaticProps = async () => {
-  // const prismic = getPrismicClient();
-  // const postsResponse = await prismic.query(TODO);
-
+export const getStaticProps: GetStaticProps = async () => {
   // TODO
+  const prismic = getPrismicClient();
+  const postsResponse = await prismic.query([
+    Prismic.predicates.at('document.type', 'posts')
+  ], {
+    fetch: ['post.title', 'post.content'],
+    pageSize: 1,
+  });
+
+  // console.log(postsResponse)
+
+  const posts = postsResponse.results.map(post => {
+    return {
+      uid: post.uid,
+      first_publication_date: format(
+        new Date(post.first_publication_date),
+        'dd MMM yyyy',
+        { locale: ptBR }
+      ),
+      data: {
+        title: RichText.asText(post.data.title),
+        subtitle: RichText.asText(post.data.subtitle),
+        author: RichText.asText(post.data.author),
+      },
+    }
+  });
+
   return {
     props: {
-
-    }
+      postsPagination: {
+        next_page: postsResponse.next_page,
+        results: posts,
+      },
+    },
+    revalidate: 60 * 60 // 1 hour
   }
 };
