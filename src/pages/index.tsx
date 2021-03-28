@@ -37,7 +37,7 @@ export const getStaticProps = async () => {
 
   // TODO
   return {
-    props: {
+    props:{
       
     }
   }
