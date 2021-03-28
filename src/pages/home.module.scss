@@ -17,6 +17,11 @@
 
     h1 {
       font-size: 1.75rem;
+      transition: color 0.2s;
+    }
+
+    &:hover h1 {
+      color: var(--highlight);
     }
 
     > p {
@@ -43,12 +48,14 @@
         time {
           display: flex;
           align-items: center;
-          margin-right: 2.5rem;
+          margin-right: 1.5rem;
+          font-size: 0.875rem;
         }
   
         p {
           display: flex;
           align-items: center;
+          font-size: 0.875rem;
         }
       }
     }
