@@ -1,4 +1,5 @@
 import { GetStaticProps } from 'next';
+import Link from 'next/link';
 import { FiCalendar, FiUser } from 'react-icons/fi';
 import Prismic from '@prismicio/client';
 
@@ -76,39 +77,43 @@ export default function Home({ postsPagination }: HomeProps) {
     <main className={styles.homeContainer}>
       <div className={styles.homeContent}>
         {postsPagination.results.map(post => (
-          <a href="" key={post.uid}>
-            <h1>{post.data.title}</h1>
-            <p>{post.data.subtitle}</p>
-            <section>
-              <div>
-                <FiCalendar size={'1.25rem'} className={styles.icon} />
-                <time>{post.first_publication_date}</time>
-              </div>
-              <div>
-                <FiUser size={'1.25rem'} className={styles.icon} />
-                <p>{post.data.author}</p>
-              </div>
-            </section>
-          </a>
+          <Link href={`/post/${post.uid}`} key={post.uid}>
+            <a>
+              <h1>{post.data.title}</h1>
+              <p>{post.data.subtitle}</p>
+              <section>
+                <div>
+                  <FiCalendar size={'1.25rem'} className={styles.icon} />
+                  <time>{post.first_publication_date}</time>
+                </div>
+                <div>
+                  <FiUser size={'1.25rem'} className={styles.icon} />
+                  <p>{post.data.author}</p>
+                </div>
+              </section>
+            </a>
+          </Link>
         ))}
 
         {
           otherPost.length > 0 ? (
             otherPost.map(post => (
-              <a href="" key={post.uid}>
-                <h1>{post.data.title}</h1>
-                <p>{post.data.subtitle}</p>
-                <section>
-                  <div>
-                    <FiCalendar size={'1.25rem'} className={styles.icon} />
-                    <time>{post.first_publication_date}</time>
-                  </div>
-                  <div>
-                    <FiUser size={'1.25rem'} className={styles.icon} />
-                    <p>{post.data.author}</p>
-                  </div>
-                </section>
-              </a>
+              <Link href={`/post/${post.uid}`} key={post.uid}>
+                <a>
+                  <h1>{post.data.title}</h1>
+                  <p>{post.data.subtitle}</p>
+                  <section>
+                    <div>
+                      <FiCalendar size={'1.25rem'} className={styles.icon} />
+                      <time>{post.first_publication_date}</time>
+                    </div>
+                    <div>
+                      <FiUser size={'1.25rem'} className={styles.icon} />
+                      <p>{post.data.author}</p>
+                    </div>
+                  </section>
+                </a>
+              </Link>
             ))
           ) : <></>
         }
