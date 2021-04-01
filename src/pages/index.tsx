@@ -1,4 +1,5 @@
 import { GetStaticProps } from 'next';
+import Head from 'next/head';
 import Link from 'next/link';
 import { FiCalendar, FiUser } from 'react-icons/fi';
 import Prismic from '@prismicio/client';
@@ -76,6 +77,9 @@ export default function Home({ postsPagination }: HomeProps) {
 
   return (
     <>
+      <Head>
+        <title>Home | spacetraveling</title>
+      </Head>
       <Header />
       <main className={styles.homeContainer}>
         <div className={styles.homeContent}>
