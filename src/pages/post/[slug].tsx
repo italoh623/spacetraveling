@@ -135,14 +135,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const post = {
     first_publication_date: response.first_publication_date,
     data: {
-      title: RichText.asText(response.data.title),
+      title: response.data.title,
       banner: {
         url: response.data.banner.url,
       },
-      author: RichText.asText(response.data.author),
+      author: response.data.author,
       content: response.data.content.map(item => {
         return {
-          heading: RichText.asText(item.heading),
+          heading: item.heading,
           body: [...item.body],
         }
       }),

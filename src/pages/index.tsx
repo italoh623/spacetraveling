@@ -62,9 +62,9 @@ export default function Home({ postsPagination }: HomeProps) {
                 { locale: ptBR }
               ),
               data: {
-                title: RichText.asText(post.data.title),
-                subtitle: RichText.asText(post.data.subtitle),
-                author: RichText.asText(post.data.author),
+                title: post.data.title,
+                subtitle: post.data.subtitle,
+                author:post.data.author,
               },
             }
           });
@@ -83,24 +83,32 @@ export default function Home({ postsPagination }: HomeProps) {
       <Header />
       <main className={styles.homeContainer}>
         <div className={styles.homeContent}>
-          {postsPagination.results.map(post => (
-            <Link href={`/post/${post.uid}`} key={post.uid}>
-              <a>
-                <h1>{post.data.title}</h1>
-                <p>{post.data.subtitle}</p>
-                <section>
-                  <div>
-                    <FiCalendar size={'1.25rem'} className={styles.icon} />
-                    <time>{post.first_publication_date}</time>
-                  </div>
-                  <div>
-                    <FiUser size={'1.25rem'} className={styles.icon} />
-                    <p>{post.data.author}</p>
-                  </div>
-                </section>
-              </a>
-            </Link>
-          ))}
+          {postsPagination.results.map(post => {
+            const formatedDate = format(
+              new Date(post.first_publication_date),
+              'dd MMM yyyy',
+              { locale: ptBR }
+            )
+
+            return (
+              <Link href={`/post/${post.uid}`} key={post.uid}>
+                <a>
+                  <h1>{post.data.title}</h1>
+                  <p>{post.data.subtitle}</p>
+                  <section>
+                    <div>
+                      <FiCalendar size={'1.25rem'} className={styles.icon} />
+                      <time>{formatedDate}</time>
+                    </div>
+                    <div>
+                      <FiUser size={'1.25rem'} className={styles.icon} />
+                      <p>{post.data.author}</p>
+                    </div>
+                  </section>
+                </a>
+              </Link>
+            )
+          })}
 
           {
             otherPost.length > 0 ? (
@@ -152,15 +160,11 @@ export const getStaticProps: GetStaticProps = async () => {
   const posts = postsResponse.results.map(post => {
     return {
       uid: post.uid,
-      first_publication_date: format(
-        new Date(post.first_publication_date),
-        'dd MMM yyyy',
-        { locale: ptBR }
-      ),
+      first_publication_date: post.first_publication_date,
       data: {
-        title: RichText.asText(post.data.title),
-        subtitle: RichText.asText(post.data.subtitle),
-        author: RichText.asText(post.data.author),
+        title: post.data.title,
+        subtitle: post.data.subtitle,
+        author: post.data.author,
       },
     }
   });
