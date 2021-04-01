@@ -70,7 +70,9 @@ export default function Post({ post }: PostProps) {
                 <div
                   key={`${index}-content`}
                   className={styles.postContent}
-                  dangerouslySetInnerHTML={{ __html: item.body.text }}
+                  dangerouslySetInnerHTML={
+                    { __html: RichText.asHtml(item.body.text) }
+                  }
                 />
               </>
             ))}
@@ -126,7 +128,7 @@ export const getStaticProps = async ({ params }) => {
         return {
           heading: RichText.asText(item.heading),
           body: {
-            text: RichText.asHtml(item.body),
+            text: [...item.body],
           },
         }
       }),
