@@ -48,7 +48,7 @@ PRISMIC_API_ENDPOINT= // Api endpoint
 
 3. `yarn install`
 
-4. `yarn start` 🥳
+4. `yarn dev` 🥳
 
 # Screenshots 
 
