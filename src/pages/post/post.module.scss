@@ -1,1 +1,85 @@
 // TODO
+.banner {
+  width: 100vw;
+}
+
+.container {
+  max-width: 720px;
+
+  padding: 0 1.25rem;
+  margin: 0 auto; 
+
+  font-size: 1.125rem;
+  line-height: 1.575rem;
+  text-align: justify;
+
+  article {
+    padding: 5rem 0;
+
+    header {
+      margin-bottom: 4rem;
+
+      h1 {
+        font-size: 3rem;
+      }
+
+      footer {
+        display: flex;
+        flex-direction: row;
+
+        div {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          & + div {
+            margin-left: 1.5rem;
+          }
+
+          .icon {
+            margin-right: 0.625rem;
+          }
+
+          time {
+            font-size: 0.875rem;
+            color: var(--info);
+          }
+
+          p {
+            font-size: 0.875rem;
+            color: var(--info);
+          }
+        }
+      }
+    }
+
+    h2 {
+      font-size: 2.25rem;
+      margin: 2.5rem 0;
+    }
+
+    p, ul {
+      margin: 1.5rem 0;
+    }
+
+    ul {
+      padding-left: 1.5rem;
+
+      li {
+        margin: 0.5rem 0;
+      }
+    }
+
+    strong {
+      font-weight: 700;
+    }
+
+    a {
+      color: var(--highlight);
+
+      &:hover {
+        text-decoration: underline;
+      }
+    } 
+  }
+}
