@@ -32,43 +32,52 @@ interface PostProps {
 
 export default function Post({ post }: PostProps) {
   // TODO
-  const time = 4;
+  const readingTime = Math.ceil(post?.data.content.reduce((acc: number, content) => {
+    const text = `${content.heading} ${content.body.text}`;
+
+    return text.split(' ').length + acc;
+  }, 0) / 200);
+
   return (
-    <>
-      <img src={post.data.banner.url} alt={post.data.title} className={styles.banner} />
-      <div className={styles.container}>
-        <article>
-          <header>
-            <h1>{post.data.title}</h1>
-            <footer>
-              <div>
-                <FiCalendar size={'1.25rem'} className={styles.icon} />
-                <time>{post.first_publication_date}</time>
-              </div>
-              <div>
-                <FiUser size={'1.25rem'} className={styles.icon} />
-                <p>{post.data.author}</p>
-              </div>
-              <div>
-                <FiClock size={'1.25rem'} className={styles.icon} />
-                <p>{`${time} min`}</p>
-              </div>
-            </footer>
-          </header>
+    post ? (
+      <>
+        <img src={post.data.banner.url} alt={post.data.title} className={styles.banner} />
+        <div className={styles.container}>
+          <article>
+            <header>
+              <h1>{post.data.title}</h1>
+              <footer>
+                <div>
+                  <FiCalendar size={'1.25rem'} className={styles.icon} />
+                  <time>{post.first_publication_date}</time>
+                </div>
+                <div>
+                  <FiUser size={'1.25rem'} className={styles.icon} />
+                  <p>{post.data.author}</p>
+                </div>
+                <div>
+                  <FiClock size={'1.25rem'} className={styles.icon} />
+                  <p>{`${readingTime} min`}</p>
+                </div>
+              </footer>
+            </header>
 
 
-          {post.data.content.map(item => (
-            <>
-              <h2>{item.heading}</h2>
-              <div
-                className={styles.postContent}
-                dangerouslySetInnerHTML={{ __html: item.body.text }}
-              />
-            </>
-          ))}
-        </article>
-      </div>
-    </>
+            {post.data.content.map(item => (
+              <>
+                <h2>{item.heading}</h2>
+                <div
+                  className={styles.postContent}
+                  dangerouslySetInnerHTML={{ __html: item.body.text }}
+                />
+              </>
+            ))}
+          </article>
+        </div>
+      </>
+    ) : (
+      <div>Carregando</div>
+    )
   )
 }
 
