@@ -1,5 +1,5 @@
 import format from 'date-fns/format';
-import { ptBR, enUS } from 'date-fns/locale';
+import { ptBR } from 'date-fns/locale';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { RichText } from 'prismic-dom';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
@@ -54,6 +54,12 @@ export default function Post({ post }: PostProps) {
 
   const readingTime = Math.ceil(totalWords / 200);
 
+  const formatedDate = format(
+    new Date(post.first_publication_date),
+    'dd MMM yyyy',
+    { locale: ptBR }
+  )
+
   return (
     <>
       <Head>
@@ -68,7 +74,7 @@ export default function Post({ post }: PostProps) {
             <footer>
               <div>
                 <FiCalendar size={'1.25rem'} className={styles.icon} />
-                <time>{post.first_publication_date}</time>
+                <time>{formatedDate}</time>
               </div>
               <div>
                 <FiUser size={'1.25rem'} className={styles.icon} />
@@ -83,16 +89,15 @@ export default function Post({ post }: PostProps) {
 
 
           {post.data.content.map((item, index) => (
-            <>
-              <h2 key={`${index}-head`}>{item.heading}</h2>
+            <div key={item.heading}>
+              <h2>{item.heading}</h2>
               <div
-                key={`${index}-content`}
                 className={styles.postContent}
                 dangerouslySetInnerHTML={
                   { __html: RichText.asHtml(item.body) }
                 }
               />
-            </>
+            </div>
           ))}
         </article>
       </div>
@@ -128,11 +133,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   // TODO
   const post = {
-    first_publication_date: format(
-      new Date(response.first_publication_date),
-      'dd MMM yyyy',
-      { locale: enUS }
-    ),
+    first_publication_date: response.first_publication_date,
     data: {
       title: RichText.asText(response.data.title),
       banner: {
