@@ -8,6 +8,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 
 import { getPrismicClient } from '../services/prismic';
 
+import Header from '../components/Header';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
@@ -74,60 +75,63 @@ export default function Home({ postsPagination }: HomeProps) {
   }
 
   return (
-    <main className={styles.homeContainer}>
-      <div className={styles.homeContent}>
-        {postsPagination.results.map(post => (
-          <Link href={`/post/${post.uid}`} key={post.uid}>
-            <a>
-              <h1>{post.data.title}</h1>
-              <p>{post.data.subtitle}</p>
-              <section>
-                <div>
-                  <FiCalendar size={'1.25rem'} className={styles.icon} />
-                  <time>{post.first_publication_date}</time>
-                </div>
-                <div>
-                  <FiUser size={'1.25rem'} className={styles.icon} />
-                  <p>{post.data.author}</p>
-                </div>
-              </section>
-            </a>
-          </Link>
-        ))}
+    <>
+      <Header />
+      <main className={styles.homeContainer}>
+        <div className={styles.homeContent}>
+          {postsPagination.results.map(post => (
+            <Link href={`/post/${post.uid}`} key={post.uid}>
+              <a>
+                <h1>{post.data.title}</h1>
+                <p>{post.data.subtitle}</p>
+                <section>
+                  <div>
+                    <FiCalendar size={'1.25rem'} className={styles.icon} />
+                    <time>{post.first_publication_date}</time>
+                  </div>
+                  <div>
+                    <FiUser size={'1.25rem'} className={styles.icon} />
+                    <p>{post.data.author}</p>
+                  </div>
+                </section>
+              </a>
+            </Link>
+          ))}
 
-        {
-          otherPost.length > 0 ? (
-            otherPost.map(post => (
-              <Link href={`/post/${post.uid}`} key={post.uid}>
-                <a>
-                  <h1>{post.data.title}</h1>
-                  <p>{post.data.subtitle}</p>
-                  <section>
-                    <div>
-                      <FiCalendar size={'1.25rem'} className={styles.icon} />
-                      <time>{post.first_publication_date}</time>
-                    </div>
-                    <div>
-                      <FiUser size={'1.25rem'} className={styles.icon} />
-                      <p>{post.data.author}</p>
-                    </div>
-                  </section>
-                </a>
-              </Link>
-            ))
-          ) : <></>
-        }
+          {
+            otherPost.length > 0 ? (
+              otherPost.map(post => (
+                <Link href={`/post/${post.uid}`} key={post.uid}>
+                  <a>
+                    <h1>{post.data.title}</h1>
+                    <p>{post.data.subtitle}</p>
+                    <section>
+                      <div>
+                        <FiCalendar size={'1.25rem'} className={styles.icon} />
+                        <time>{post.first_publication_date}</time>
+                      </div>
+                      <div>
+                        <FiUser size={'1.25rem'} className={styles.icon} />
+                        <p>{post.data.author}</p>
+                      </div>
+                    </section>
+                  </a>
+                </Link>
+              ))
+            ) : <></>
+          }
 
-        {
-          nextPage ? (
-            <button
-              onClick={loadPosts}
-            >Carregar mais posts</button>
-          ) : <></>
-        }
+          {
+            nextPage ? (
+              <button
+                onClick={loadPosts}
+              >Carregar mais posts</button>
+            ) : <></>
+          }
 
-      </div>
-    </main>
+        </div>
+      </main>
+    </>
   )
 }
 

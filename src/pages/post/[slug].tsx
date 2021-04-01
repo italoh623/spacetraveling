@@ -10,6 +10,9 @@ import { getPrismicClient } from '../../services/prismic';
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 
+import Header from '../../components/Header';
+import { useRouter } from 'next/router';
+
 interface Post {
   first_publication_date: string | null;
   data: {
@@ -33,6 +36,11 @@ interface PostProps {
 
 export default function Post({ post }: PostProps) {
   // TODO
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <h1>Carregando...</h1>
+  }
   const readingTime = Math.ceil(post?.data.content.reduce((acc: number, content) => {
     const text = `${content.heading} ${content.body.text}`;
 
@@ -40,59 +48,56 @@ export default function Post({ post }: PostProps) {
   }, 0) / 200);
 
   return (
-    post.data?.title ? (
-      <>
-        <img src={post.data.banner.url} alt={post.data.title} className={styles.banner} />
-        <div className={styles.container}>
-          <article>
-            <header>
-              <h1>{post.data.title}</h1>
-              <footer>
-                <div>
-                  <FiCalendar size={'1.25rem'} className={styles.icon} />
-                  <time>{post.first_publication_date}</time>
-                </div>
-                <div>
-                  <FiUser size={'1.25rem'} className={styles.icon} />
-                  <p>{post.data.author}</p>
-                </div>
-                <div>
-                  <FiClock size={'1.25rem'} className={styles.icon} />
-                  <p>{`${readingTime} min`}</p>
-                </div>
-              </footer>
-            </header>
+    <>
+      <Header />
+      <img src={post.data.banner.url} alt={post.data.title} className={styles.banner} />
+      <div className={styles.container}>
+        <article>
+          <header>
+            <h1>{post.data.title}</h1>
+            <footer>
+              <div>
+                <FiCalendar size={'1.25rem'} className={styles.icon} />
+                <time>{post.first_publication_date}</time>
+              </div>
+              <div>
+                <FiUser size={'1.25rem'} className={styles.icon} />
+                <p>{post.data.author}</p>
+              </div>
+              <div>
+                <FiClock size={'1.25rem'} className={styles.icon} />
+                <p>{`${readingTime} min`}</p>
+              </div>
+            </footer>
+          </header>
 
 
-            {post.data.content.map((item, index) => (
-              <>
-                <h2 key={`${index}-head`}>{item.heading}</h2>
-                <div
-                  key={`${index}-content`}
-                  className={styles.postContent}
-                  dangerouslySetInnerHTML={
-                    { __html: RichText.asHtml(item.body.text) }
-                  }
-                />
-              </>
-            ))}
-          </article>
-        </div>
-      </>
-    ) : (
-      <h1>Carregando...</h1>
-    )
+          {post.data.content.map((item, index) => (
+            <>
+              <h2 key={`${index}-head`}>{item.heading}</h2>
+              <div
+                key={`${index}-content`}
+                className={styles.postContent}
+                dangerouslySetInnerHTML={
+                  { __html: RichText.asHtml(item.body.text) }
+                }
+              />
+            </>
+          ))}
+        </article>
+      </div>
+    </>
   )
 }
 
-export const getStaticPaths = async ({ params }) => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const prismic = getPrismicClient();
   const posts = await prismic.query([
     Prismic.predicates.at('document.type', 'posts')
   ]);
 
   // TODO
-  const uidPosts = posts.results.map(post => {
+  const paths = posts.results.map(post => {
     return {
       params: {
         slug: post.uid
@@ -101,12 +106,12 @@ export const getStaticPaths = async ({ params }) => {
   });
 
   return {
-    paths: uidPosts,
+    paths,
     fallback: true,
   };
 };
 
-export const getStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug } = params;
   const prismic = getPrismicClient();
   const response = await prismic.getByUID('posts', String(slug), {});
