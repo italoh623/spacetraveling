@@ -4,6 +4,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { RichText } from 'prismic-dom';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 
+import Prismic from '@prismicio/client';
 import { getPrismicClient } from '../../services/prismic';
 
 import commonStyles from '../../styles/common.module.scss';
@@ -21,7 +22,7 @@ interface Post {
       heading: string;
       body: {
         text: string;
-      }[];
+      };
     }[];
   };
 }
@@ -39,7 +40,7 @@ export default function Post({ post }: PostProps) {
   }, 0) / 200);
 
   return (
-    post ? (
+    post.data?.title ? (
       <>
         <img src={post.data.banner.url} alt={post.data.title} className={styles.banner} />
         <div className={styles.container}>
@@ -63,10 +64,11 @@ export default function Post({ post }: PostProps) {
             </header>
 
 
-            {post.data.content.map(item => (
+            {post.data.content.map((item, index) => (
               <>
-                <h2>{item.heading}</h2>
+                <h2 key={`${index}-head`}>{item.heading}</h2>
                 <div
+                  key={`${index}-content`}
                   className={styles.postContent}
                   dangerouslySetInnerHTML={{ __html: item.body.text }}
                 />
@@ -76,24 +78,31 @@ export default function Post({ post }: PostProps) {
         </div>
       </>
     ) : (
-      <div>Carregando</div>
+      <h1>Carregando...</h1>
     )
   )
 }
 
-// export const getStaticPaths = async () => {
-//   const prismic = getPrismicClient();
-//   const posts = await prismic.query(TODO);
+export const getStaticPaths = async ({ params }) => {
+  const prismic = getPrismicClient();
+  const posts = await prismic.query([
+    Prismic.predicates.at('document.type', 'posts')
+  ]);
 
-//   // TODO
-// };
+  // TODO
+  const uidPosts = posts.results.map(post => {
+    return {
+      params: {
+        slug: post.uid
+      }
+    };
+  });
 
-export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    paths: [],
-    fallback: 'blocking'
-  }
-}
+    paths: uidPosts,
+    fallback: true,
+  };
+};
 
 export const getStaticProps = async ({ params }) => {
   const { slug } = params;

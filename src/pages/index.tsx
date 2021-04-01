@@ -30,7 +30,7 @@ interface PostPagination {
 }
 
 interface HomeProps {
-  postsPagination: PostPagination; xxs
+  postsPagination: PostPagination;
 }
 
 export default function Home({ postsPagination }: HomeProps) {
@@ -140,8 +140,6 @@ export const getStaticProps: GetStaticProps = async () => {
     fetch: ['post.title', 'post.content'],
     pageSize: 1,
   });
-
-  // console.log(postsResponse)
 
   const posts = postsResponse.results.map(post => {
     return {
