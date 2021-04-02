@@ -1,11 +1,16 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Component } from 'react';
+import { Component, useEffect } from 'react';
 
-export default class Comments extends Component {
-  componentDidMount() {
+const Comments = () => {
+
+  useEffect(() => {
+    document.getElementById
     const script = document.createElement('script');
     const anchor = document.getElementById('inject-comments-for-uterances');
+
+    if (anchor.children.length > 0) {
+      anchor.removeChild(anchor.children[0]);
+    }
+
     script.setAttribute('src', 'https://utteranc.es/client.js');
     script.setAttribute('crossorigin', 'anonymous');
     script.setAttribute('async', 'true');
@@ -16,14 +21,14 @@ export default class Comments extends Component {
     script.setAttribute('issue-term', 'pathname');
     script.setAttribute('theme', 'dark-blue');
     anchor.appendChild(script);
-  }
+  });
 
-  render() {
-    return (
-      <div
-        id="inject-comments-for-uterances"
-        style={{ marginBottom: '4rem' }}
-      />
-    );
-  }
+  return (
+    <div
+      id="inject-comments-for-uterances"
+      style={{ marginBottom: '4rem' }}
+    />
+  );
 }
+
+export default Comments;
