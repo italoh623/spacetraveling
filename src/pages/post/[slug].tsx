@@ -133,9 +133,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   // TODO
   const post = {
+    uid: response.uid,
     first_publication_date: response.first_publication_date,
     data: {
       title: response.data.title,
+      subtitle: response.data.subtitle,
       banner: {
         url: response.data.banner.url,
       },
