@@ -56,6 +56,10 @@ PRISMIC_API_ENDPOINT= // Api endpoint
 
 ![](https://raw.githubusercontent.com/italoh623/spacetraveling/master/screenshots/home.png)
 
+* Post Page
+
+![](https://raw.githubusercontent.com/italoh623/spacetraveling/master/screenshots/post.png)
+
 
 ***The application still is in development 🚧. Soon this file will be updated with the deploy of the app and new features***
 
