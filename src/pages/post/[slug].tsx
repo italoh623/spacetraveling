@@ -16,6 +16,7 @@ import { useRouter } from 'next/router';
 
 interface Post {
   first_publication_date: string | null;
+  last_publication_date: string | null;
   data: {
     title: string;
     banner: {
@@ -54,9 +55,21 @@ export default function Post({ post }: PostProps) {
 
   const readingTime = Math.ceil(totalWords / 200);
 
-  const formatedDate = format(
+  const formatedFirstPublicationDate = format(
     new Date(post.first_publication_date),
     'dd MMM yyyy',
+    { locale: ptBR }
+  )
+
+  const formatedLastPublicationDate = format(
+    new Date(post.last_publication_date),
+    'dd MMM yyyy',
+    { locale: ptBR }
+  )
+
+  const formatedLastPublicationHour = format(
+    new Date(post.last_publication_date),
+    'hh:mm',
     { locale: ptBR }
   )
 
@@ -71,10 +84,11 @@ export default function Post({ post }: PostProps) {
         <article>
           <header>
             <h1>{post.data.title}</h1>
+            
             <footer>
               <div>
                 <FiCalendar size={'1.25rem'} className={styles.icon} />
-                <time>{formatedDate}</time>
+                <time>{formatedFirstPublicationDate}</time>
               </div>
               <div>
                 <FiUser size={'1.25rem'} className={styles.icon} />
@@ -85,6 +99,8 @@ export default function Post({ post }: PostProps) {
                 <p>{`${readingTime} min`}</p>
               </div>
             </footer>
+
+            <time>{`* editado em ${formatedLastPublicationDate}, às ${formatedLastPublicationHour}`}</time>
           </header>
 
 
@@ -135,6 +151,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const post = {
     uid: response.uid,
     first_publication_date: response.first_publication_date,
+    last_publication_date: response.last_publication_date,
     data: {
       title: response.data.title,
       subtitle: response.data.subtitle,
