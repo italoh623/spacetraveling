@@ -1,18 +1,20 @@
+import { GetStaticPaths, GetStaticProps } from 'next';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+
 import format from 'date-fns/format';
 import { ptBR } from 'date-fns/locale';
-import { GetStaticPaths, GetStaticProps } from 'next';
-import { RichText } from 'prismic-dom';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 
 import Prismic from '@prismicio/client';
+import { RichText } from 'prismic-dom';
 import { getPrismicClient } from '../../services/prismic';
+
+import Header from '../../components/Header';
+import Comments from '../../components/Comments';
 
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
-
-import Header from '../../components/Header';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
 
 interface Post {
   first_publication_date: string | null;
@@ -84,7 +86,7 @@ export default function Post({ post }: PostProps) {
         <article>
           <header>
             <h1>{post.data.title}</h1>
-            
+
             <footer>
               <div>
                 <FiCalendar size={'1.25rem'} className={styles.icon} />
@@ -116,6 +118,8 @@ export default function Post({ post }: PostProps) {
             </div>
           ))}
         </article>
+
+        <Comments />
       </div>
     </>
   )
