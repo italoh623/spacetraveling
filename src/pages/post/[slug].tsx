@@ -117,7 +117,10 @@ export default function Post({ post, navigation }: PostProps) {
               </div>
             </footer>
 
-            <time>{`* editado em ${formatedLastPublicationDate}, às ${formatedLastPublicationHour}`}</time>
+            {post.last_publication_date &&
+            (<time>
+              {`* editado em ${formatedLastPublicationDate}, às ${formatedLastPublicationHour}`}
+            </time>)}
           </header>
 
 
@@ -231,9 +234,6 @@ export const getStaticProps: GetStaticProps = async ({
       }),
     },
   };
-
-  console.log(prevPost)
-  console.log(nextPost)
 
   return {
     props: {
